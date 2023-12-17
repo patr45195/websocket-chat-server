@@ -3,7 +3,7 @@ const app = express();
 const PORT = 5000;
 
 const http = require("http").Server(app);
-const cors = require("cors");
+
 const socketIO = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3000",
@@ -19,24 +19,20 @@ app.get("api", (req, res) => {
 let users = [];
 
 socketIO.on("connection", (socket) => {
-  console.log(`User connected with socketID = ${socket.id}`);
-
-  socket.on("message", (data) => {
-    socketIO.emit("response", data);
+  socket.on("message", (userMessage) => {
+    socketIO.emit("response", userMessage);
   });
 
   socket.on("typing", (data) => socket.broadcast.emit("responseTyping", data));
 
   socket.on("newUser", (data) => {
     users.push(data);
-    socketIO.emit("responseNewUser", users);
-    console.log(users)
+    socketIO.emit("usersChange", users);
   });
 
   socket.on("disconnect", () => {
-    console.log(`${socket.id} disconnected.`);
-    users = users.filter(item => item.socketID !== socket.id);
-    console.log('users: ', users)
+    users = users.filter((item) => item.socketID !== socket.id);
+    socketIO.emit("usersChange", users);
   });
 });
 
