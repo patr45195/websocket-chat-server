@@ -24,7 +24,7 @@ socketIO.on("connection", (socket) => {
   socketIO.emit("response", usersMessages);
 
   socket.on("message", (userMessage) => {
-    usersMessages.push(userMessage)
+    usersMessages.push(userMessage);
     socketIO.emit("response", usersMessages);
   });
 
@@ -40,6 +40,11 @@ socketIO.on("connection", (socket) => {
   socket.on("newUser", (data) => {
     users.push(data);
     socketIO.emit("usersChange", users);
+  });
+
+  socket.on("clearChat", () => {
+    usersMessages = [];
+    socketIO.emit("response", usersMessages);
   });
 
   socket.on("disconnect", () => {
