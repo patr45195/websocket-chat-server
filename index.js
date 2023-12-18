@@ -17,13 +17,21 @@ app.get("api", (req, res) => {
 });
 
 let users = [];
+let typingTimer = {};
 
 socketIO.on("connection", (socket) => {
   socket.on("message", (userMessage) => {
     socketIO.emit("response", userMessage);
   });
 
-  socket.on("typing", (data) => socket.broadcast.emit("responseTyping", data));
+  socket.on("typing", (data) => {
+    if (!typingTimer[socket.id]) {
+      typingTimer[socket.id] = setTimeout(() => {
+        delete typingTimer[socket.id];
+      }, 3000);
+      socket.broadcast.emit("responseTyping", data);
+    }
+  });
 
   socket.on("newUser", (data) => {
     users.push(data);
