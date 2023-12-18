@@ -17,11 +17,15 @@ app.get("api", (req, res) => {
 });
 
 let users = [];
+let usersMessages = [];
 let typingTimer = {};
 
 socketIO.on("connection", (socket) => {
+  socketIO.emit("response", usersMessages);
+
   socket.on("message", (userMessage) => {
-    socketIO.emit("response", userMessage);
+    usersMessages.push(userMessage)
+    socketIO.emit("response", usersMessages);
   });
 
   socket.on("typing", (data) => {
