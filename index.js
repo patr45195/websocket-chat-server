@@ -49,6 +49,9 @@ socketIO.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     users = users.filter((item) => item.socketID !== socket.id);
+    if (users.length === 0) {
+      usersMessages = [];
+    }
     socketIO.emit("usersChange", users);
   });
 });
