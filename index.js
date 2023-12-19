@@ -4,6 +4,10 @@ const cors = require("cors");
 
 const PORT = 5000;
 
+let users = [];
+let usersMessages = [];
+let typingTimer = {};
+
 const http = require("http").Server(app);
 
 const socketIO = require("socket.io")(http, {
@@ -18,15 +22,15 @@ app.use(
   })
 );
 
-app.get("/api", (req, res) => {
-  res.json({
-    message: "Hello",
-  });
-});
+app.get("/freeUserName", (req, res) => {
+  const { userName } = req.query;
 
-let users = [];
-let usersMessages = [];
-let typingTimer = {};
+  if (users.find((item) => item.user === userName)) {
+    res.json(false);
+  } else {
+    res.json(true);
+  }
+});
 
 socketIO.on("connection", (socket) => {
   socketIO.emit("response", usersMessages);
