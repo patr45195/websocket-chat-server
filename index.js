@@ -4,14 +4,6 @@ const cors = require("cors");
 
 const PORT = 5000;
 
-// {
-//   date: 1703004634709,
-//   messageID: "Jxo3A_pqDW3WvSwiAAAF-0.0014249788555149578",
-//   name: "Alex",
-//   socketId: "Jxo3A_pqDW3WvSwiAAAF",
-//   text: "Hello",
-// },
-
 let users = [];
 let usersMessages = [];
 let typingTimer = {};
