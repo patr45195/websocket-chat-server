@@ -25,7 +25,7 @@ app.use(
 app.get("/freeUserName", (req, res) => {
   const { userName } = req.query;
 
-  if (users.find((item) => item.user === userName)) {
+  if (users.find((item) => item.user.toLowerCase() === userName.toLowerCase())) {
     res.json(false);
   } else {
     res.json(true);
